@@ -1,5 +1,5 @@
 <network>
-  <name>k8s-wkr02</name>
+  <name>cluster01-wkr00</name>
   <bridge name="cluster01-wkr00" />
   <forward mode="route" />
   <ip address="10.10.13.3" netmask="255.255.255.0" />
