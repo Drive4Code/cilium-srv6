@@ -61,9 +61,9 @@ spec:
       routerID: "10.10.13.2"
       srv6Responder: true
       peers:
-        - name: "r14"
-          localAddress: fc00:0:2003::2  
         - name: "r13"
+          localAddress: fc00:0:2003::2  
+        - name: "r14"
           localAddress: fc00:0:1003::2
         # - name: "xrd05"
         #   localAddress: fc00:0:5::2
