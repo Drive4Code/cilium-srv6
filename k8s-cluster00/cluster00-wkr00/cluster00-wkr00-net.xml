@@ -1,0 +1,6 @@
+<network>
+  <name>cluster00-wkr00</name>
+  <bridge name="cluster00-wkr00" />
+  <forward mode="route" />
+  <ip address="10.10.11.3" netmask="255.255.255.0" />
+</network>

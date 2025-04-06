@@ -1,6 +1,0 @@
-<network>
-  <name>k8s-wkr02</name>
-  <bridge name="k8s-wkr02" />
-  <forward mode="route" />
-  <ip address="10.10.13.1" netmask="255.255.255.0" />
-</network>

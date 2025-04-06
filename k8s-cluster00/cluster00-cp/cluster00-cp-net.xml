@@ -1,0 +1,6 @@
+<network>
+  <name>cp-cluster00</name>
+  <bridge name="cp-cluster00" />
+  <forward mode="route" />
+  <ip address="10.10.10.3" netmask="255.255.255.0" />
+</network>

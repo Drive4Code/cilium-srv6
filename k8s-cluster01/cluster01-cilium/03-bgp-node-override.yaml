@@ -1,0 +1,29 @@
+
+---
+apiVersion: isovalent.com/v1alpha1
+kind: IsovalentBGPNodeConfigOverride
+metadata:
+  name: cluster01-cp
+spec:
+  bgpInstances:
+    - name: "asn4200001002"
+      routerID: "10.10.12.2"
+      srv6Responder: true
+      peers:
+        - name: "r13"
+          localAddress: fc00:0:1002::2
+
+---
+apiVersion: isovalent.com/v1alpha1
+kind: IsovalentBGPNodeConfigOverride
+metadata:
+  name: cluster01-wkr00
+spec:
+  bgpInstances:
+    - name: "asn4200001003"
+      routerID: "10.10.13.2"
+      srv6Responder: true
+      peers:
+        - name: "r14"
+          localAddress: fc00:0:1003::2
+
