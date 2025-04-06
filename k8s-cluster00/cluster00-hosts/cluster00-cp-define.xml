@@ -46,7 +46,7 @@
     </interface>
     <interface type='network'>
       <mac address="52:54:11:22:33:44"/>   
-      <source network='cp-cluster00' bridge='cp-cluster00'/>
+      <source network='cluster00-cp' bridge='cluster00-cp'/>
       <target dev='vnet1'/>
       <model type='virtio'/>
       <alias name='net0'/>
