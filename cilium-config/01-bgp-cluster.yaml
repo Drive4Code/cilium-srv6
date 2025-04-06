@@ -18,11 +18,11 @@ spec:
       peerConfigRef:
         name: "fabric-peer"
 
-    - name: "r10"
-      peerASN: 65010
-      peerAddress: fc00:0:2000::3
-      peerConfigRef:
-        name: "fabric-peer"
+    # - name: "r10"
+    #   peerASN: 65010
+    #   peerAddress: fc00:0:2000::3
+    #   peerConfigRef:
+    #     name: "fabric-peer"
 
     vrfs:
     - vrfRef: "blue"
@@ -52,11 +52,11 @@ spec:
       peerConfigRef:
         name: "fabric-peer"
 
-    - name: "r09"
-      peerASN: 65010
-      peerAddress: fc00:0:2001::3
-      peerConfigRef:
-        name: "fabric-peer"
+    # - name: "r09"
+    #   peerASN: 65010
+    #   peerAddress: fc00:0:2001::3
+    #   peerConfigRef:
+    #     name: "fabric-peer"
 
     vrfs:
     - vrfRef: "blue"
@@ -94,11 +94,11 @@ spec:
       peerConfigRef:
         name: "fabric-peer"
 
-    - name: "r14"
-      peerASN: 65014
-      peerAddress: fc00:0:2002::3
-      peerConfigRef:
-        name: "fabric-peer"
+    # - name: "r14"
+    #   peerASN: 65014
+    #   peerAddress: fc00:0:2002::3
+    #   peerConfigRef:
+    #     name: "fabric-peer"
         
     vrfs:
     - vrfRef: "blue"
@@ -130,11 +130,6 @@ spec:
   - name: "asn4200001003"
     localASN: 4200001003
     peers:
-    - name: "r13"
-      peerASN: 65013
-      peerAddress: fc00:0:2003::3
-      peerConfigRef:
-        name: "fabric-peer"
 
     - name: "r14"
       peerASN: 65014
@@ -142,6 +137,12 @@ spec:
       peerConfigRef:
         name: "fabric-peer"
         
+    # - name: "r13"
+    #   peerASN: 65013
+    #   peerAddress: fc00:0:2003::3
+    #   peerConfigRef:
+    #     name: "fabric-peer"
+
     vrfs:
     - vrfRef: "blue"
       rd: "1003:1"
