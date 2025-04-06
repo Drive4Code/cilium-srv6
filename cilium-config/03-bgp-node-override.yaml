@@ -11,8 +11,8 @@ spec:
       peers:
         - name: "r09"
           localAddress: fc00:0:1000::2
-        - name: "r10"
-          localAddress: fc00:0:2000::2
+        # - name: "r10"
+        #   localAddress: fc00:0:2000::2
         # - name: "xrd01"
         #   localAddress: fc00:0:1000::2
 
@@ -27,10 +27,10 @@ spec:
       routerID: "10.10.11.2"
       srv6Responder: true
       peers:
+        # - name: "r09"
+        #   localAddress: fc00:0:2001::2
         - name: "r10"
           localAddress: fc00:0:1001::2
-        - name: "r09"
-          localAddress: fc00:0:2001::2
         # - name: "xrd01"
         #   localAddress: fc00:0:1001::2
 ---
@@ -46,8 +46,8 @@ spec:
       peers:
         - name: "r13"
           localAddress: fc00:0:1002::2
-        - name: "r14"
-          localAddress: fc00:0:2002::2
+        # - name: "r14"
+        #   localAddress: fc00:0:2002::2
         # - name: "xrd05"
         #   localAddress: fc00:0:5::2
 ---
@@ -61,8 +61,8 @@ spec:
       routerID: "10.10.13.2"
       srv6Responder: true
       peers:
-        - name: "r13"
-          localAddress: fc00:0:2003::2  
+        # - name: "r13"
+        #   localAddress: fc00:0:2003::2  
         - name: "r14"
           localAddress: fc00:0:1003::2
         # - name: "xrd05"
