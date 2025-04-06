@@ -91,28 +91,16 @@ topology:
       mgmt-ipv4: 172.20.18.114
       startup-config: xrd-config/xrd14.cfg      
 
-    k8s-cp:
+    cluster00-cp:
       kind: bridge
 
-    k8s-cp2:
+    cluster01-cp:
       kind: bridge
 
-    k8s-wkr00:
+    cluster00-wkr00:
       kind: bridge
 
-    k8s-wkr00-net2:
-      kind: bridge
-
-    k8s-wkr01:
-      kind: bridge
-
-    k8s-wkr01-net2:
-      kind: bridge
-
-    k8s-wkr02:
-      kind: bridge
-
-    k8s-wkr02-net2:
+    cluster01-wkr00:
       kind: bridge
 
     xrd03-inet:
@@ -153,11 +141,9 @@ topology:
     - endpoints: ["xrd08:Gi0-0-0-2", "xrd09:Gi0-0-0-1"]
     - endpoints: ["xrd08:Gi0-0-0-3", "xrd10:Gi0-0-0-1"]
 
-    - endpoints: ["xrd09:Gi0-0-0-2", "k8s-cp:xrd09-Gi0-0-0-2"]
-    - endpoints: ["xrd09:Gi0-0-0-3", "k8s-wkr00-net2:xrd09-Gi0-0-0-3"]
+    - endpoints: ["xrd09:Gi0-0-0-2", "cluster00-cp:xrd09-Gi0-0-0-2"]
 
-    - endpoints: ["xrd10:Gi0-0-0-2", "k8s-wkr00:xrd10-Gi0-0-0-2"]
-    - endpoints: ["xrd10:Gi0-0-0-3", "k8s-cp2:xrd10-Gi0-0-0-3"]
+    - endpoints: ["xrd10:Gi0-0-0-2", "cluster00-wkr00:xrd10-Gi0-0-0-2"]
 
     - endpoints: ["xrd11:Gi0-0-0-2", "xrd13:Gi0-0-0-0"]
     - endpoints: ["xrd11:Gi0-0-0-3", "xrd14:Gi0-0-0-0"]
@@ -165,10 +151,8 @@ topology:
     - endpoints: ["xrd12:Gi0-0-0-2", "xrd13:Gi0-0-0-1"]
     - endpoints: ["xrd12:Gi0-0-0-3", "xrd14:Gi0-0-0-1"]
 
-    - endpoints: ["xrd13:Gi0-0-0-2", "k8s-wkr01:xrd13-Gi0-0-0-2"]
-    - endpoints: ["xrd13:Gi0-0-0-3", "k8s-wkr02-net2:xrd13-Gi0-0-0-3"]
+    - endpoints: ["xrd13:Gi0-0-0-2", "cluster01-cp:xrd13-Gi0-0-0-2"]
 
-    - endpoints: ["xrd14:Gi0-0-0-2", "k8s-wkr02:xrd14-Gi0-0-0-2"]
-    - endpoints: ["xrd14:Gi0-0-0-3", "k8s-wkr01-net2:xrd14-Gi0-0-0-3"]
+    - endpoints: ["xrd14:Gi0-0-0-2", "cluster01-wkr00:xrd14-Gi0-0-0-2"]
 
 
