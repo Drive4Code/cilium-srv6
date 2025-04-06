@@ -13,8 +13,8 @@ spec:
           localAddress: fc00:0:1000::2
         - name: "r10"
           localAddress: fc00:0:2000::2
-        - name: "xrd01"
-          localAddress: fc00:0:1000::2
+        # - name: "xrd01"
+        #   localAddress: fc00:0:1000::2
 
 ---
 apiVersion: isovalent.com/v1alpha1
@@ -31,8 +31,8 @@ spec:
           localAddress: fc00:0:1001::2
         - name: "r09"
           localAddress: fc00:0:2001::2
-        - name: "xrd01"
-          localAddress: fc00:0:1001::2
+        # - name: "xrd01"
+        #   localAddress: fc00:0:1001::2
 ---
 apiVersion: isovalent.com/v1alpha1
 kind: IsovalentBGPNodeConfigOverride
@@ -48,8 +48,8 @@ spec:
           localAddress: fc00:0:1002::2
         - name: "r14"
           localAddress: fc00:0:2002::2
-        - name: "xrd05"
-          localAddress: fc00:0:5::2
+        # - name: "xrd05"
+        #   localAddress: fc00:0:5::2
 ---
 apiVersion: isovalent.com/v1alpha1
 kind: IsovalentBGPNodeConfigOverride
@@ -65,5 +65,5 @@ spec:
           localAddress: fc00:0:2003::2  
         - name: "r13"
           localAddress: fc00:0:1003::2
-        - name: "xrd05"
-          localAddress: fc00:0:5::2
+        # - name: "xrd05"
+        #   localAddress: fc00:0:5::2

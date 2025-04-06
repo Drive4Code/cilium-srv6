@@ -24,12 +24,6 @@ spec:
       peerConfigRef:
         name: "fabric-peer"
 
-    - name: "xrd99"
-      peerASN: 4200001099
-      peerAddress: fc00:0:1099::1
-      peerConfigRef:
-        name: "srv6-peer"
-
     vrfs:
     - vrfRef: "blue"
       rd: "1000:1"
@@ -63,12 +57,6 @@ spec:
       peerAddress: fc00:0:2001::3
       peerConfigRef:
         name: "fabric-peer"
-
-    - name: "xrd01"
-      peerASN: 65000
-      peerAddress: fc00:0:1::1
-      peerConfigRef:
-        name: "srv6-peer"
 
     vrfs:
     - vrfRef: "blue"
@@ -111,12 +99,6 @@ spec:
       peerAddress: fc00:0:2002::3
       peerConfigRef:
         name: "fabric-peer"
-
-    - name: "xrd05"
-      peerASN: 65005
-      peerAddress: fc00:0:5::1
-      peerConfigRef:
-        name: "srv6-peer"
         
     vrfs:
     - vrfRef: "blue"
@@ -129,6 +111,48 @@ spec:
       
     - vrfRef: "green"
       rd: "1002:1"
+      importRTs:
+        - "5:5"
+      exportRTs:
+        - "5:5"
+      configRef: green-config
+
+---
+apiVersion: isovalent.com/v1alpha1
+kind: IsovalentBGPClusterConfig
+metadata:
+  name: k8s-wkr02
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: k8s-wkr02
+  bgpInstances:
+  - name: "asn4200001003"
+    localASN: 4200001003
+    peers:
+    - name: "r13"
+      peerASN: 65013
+      peerAddress: fc00:0:2003::3
+      peerConfigRef:
+        name: "fabric-peer"
+
+    - name: "r14"
+      peerASN: 65014
+      peerAddress: fc00:0:1003::3
+      peerConfigRef:
+        name: "fabric-peer"
+        
+    vrfs:
+    - vrfRef: "blue"
+      rd: "1003:1"
+      importRTs:
+        - "4:4"
+      exportRTs:
+        - "4:4"
+      configRef: blue-config
+      
+    - vrfRef: "green"
+      rd: "1003:1"
       importRTs:
         - "5:5"
       exportRTs:

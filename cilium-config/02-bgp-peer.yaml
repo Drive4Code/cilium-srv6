@@ -10,13 +10,15 @@ spec:
       advertisements:
         matchLabels:
           advertise: "bgpv6unicast"
----
-apiVersion: isovalent.com/v1alpha1
-kind: IsovalentBGPPeerConfig
-metadata:
-  name: srv6-peer
-spec:
-  ebgpMultihop: 10
-  families:
     - afi: ipv4
       safi: mpls_vpn
+# ---
+# apiVersion: isovalent.com/v1alpha1
+# kind: IsovalentBGPPeerConfig
+# metadata:
+#   name: srv6-peer
+# spec:
+#   ebgpMultihop: 10
+#   families:
+#     - afi: ipv4
+#       safi: mpls_vpn
