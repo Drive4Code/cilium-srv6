@@ -20,11 +20,11 @@ spec:
 
     vrfs:
     - vrfRef: "blue"
-      rd: "1000:1"
+      rd: "1000:0"
       importRTs:
-        - "4:4"
+        - "101:1"
       exportRTs:
-        - "4:4"
+        - "101:1"
       configRef: blue-config
 
 ---
@@ -48,18 +48,18 @@ spec:
 
     vrfs:
     - vrfRef: "blue"
-      rd: "1001:1"
+      rd: "1001:0"
       importRTs:
-        - "4:4"
+        - "101:1"
       exportRTs:
-        - "4:4"
+        - "101:1"
       configRef: blue-config
 
     - vrfRef: "green"
       rd: "1001:1"
       importRTs:
-        - "5:5"
+        - "102:1"
       exportRTs:
-        - "5:5"
+        - "102:1"
       configRef: green-config
 
