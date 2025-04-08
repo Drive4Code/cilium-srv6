@@ -4,12 +4,21 @@ cluster00
 ```
 cilium bgp peers
 cilium bgp peers --node cluster00-wkr00
+cilium bgp routes available ipv6 unicast
+cilium bgp routes available ipv4 mpls_vpn
+
+kubectl get pods -A
+kubectl exec -it -n blue blue0 -- /bin/sh
 ```
 
 cluster01
 ```
 cilium bgp peers
 cilium bgp peers --node cluster01-wkr00
+cilium bgp routes available ipv6 unicast
+cilium bgp routes available ipv4 mpls_vpn
+
+
 ```
 
 xrd09

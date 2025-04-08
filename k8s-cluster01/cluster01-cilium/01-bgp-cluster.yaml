@@ -22,17 +22,17 @@ spec:
     - vrfRef: "blue"
       rd: "1002:1"
       importRTs:
-        - "4:4"
+        - "101:1"
       exportRTs:
-        - "4:4"
+        - "101:1"
       configRef: blue-config
       
     - vrfRef: "green"
       rd: "1002:1"
       importRTs:
-        - "5:5"
+        - "102:1"
       exportRTs:
-        - "5:5"
+        - "102:1"
       configRef: green-config
 
 ---
@@ -59,15 +59,15 @@ spec:
     - vrfRef: "blue"
       rd: "1003:1"
       importRTs:
-        - "4:4"
+        - "101:1"
       exportRTs:
-        - "4:4"
+        - "101:1"
       configRef: blue-config
       
     - vrfRef: "green"
       rd: "1003:1"
       importRTs:
-        - "5:5"
+        - "102:1"
       exportRTs:
-        - "5:5"
+        - "102:1"
       configRef: green-config

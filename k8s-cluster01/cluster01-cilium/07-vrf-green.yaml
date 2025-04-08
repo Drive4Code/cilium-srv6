@@ -28,7 +28,7 @@ kind: IsovalentVRF
 metadata:
   name: green
 spec:
-  vrfID: 5
+  vrfID: 102
   locatorPoolRef: pool0
   rules:
   - selectors:
