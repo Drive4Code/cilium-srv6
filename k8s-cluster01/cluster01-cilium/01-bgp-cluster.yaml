@@ -20,7 +20,7 @@ spec:
         
     vrfs:
     - vrfRef: "blue"
-      rd: "1002:1"
+      rd: "1002:0"
       importRTs:
         - "101:1"
       exportRTs:
@@ -57,7 +57,7 @@ spec:
 
     vrfs:
     - vrfRef: "blue"
-      rd: "1003:1"
+      rd: "1003:0"
       importRTs:
         - "101:1"
       exportRTs:
