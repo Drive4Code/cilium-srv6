@@ -1,44 +1,15 @@
 # cilium-srv6-lab part2
 
-## Install and Configure Cilium Enterprise CNI
+## Install and Configure Cilium Enterprise CNI on control plane nodes
 
-We'll use a Helm chart to install Cilium Enterprise. Per the Helm homepage, *Helm helps you manage Kubernetes applications — Helm Charts help you define, install, and upgrade even the most complex Kubernetes application.*
-
-In our lab Helm itself has been pre-installed on the dCloud nodes, however, if you wish to build this lab in your own environment Helm installation instructions can be found here: https://helm.sh/docs/intro/install/
-
-Note: All the Cilium installation and configuration tasks will be run from *`k8s-cp-node00`*.
-
-1. Add the Helm Cilium repository to the *`k8s control plane node`*. 
+cd into the k8s-cluster00/cilium directory
 ```
-helm repo add isovalent https://helm.isovalent.com
+cd k8s-cluster00
 ```
 
-  Expected output:
-  ```
-  cisco@k8s-cp-node00:~$ helm repo add isovalent https://helm.isovalent.com
-  "isovalent" has been added to your repositories
-  ```
-
-2. Verify the repo with:
+1. Install Cilium Enterprise via this Helm chart: [cilium-enterprise.yaml](cilium/cilium-enterprise.yaml)
 ```
-helm repo list
-```
-
-  Expected output:
-  ```
-  cisco@k8s-cp-node00:~$ helm repo list
-  NAME     	URL                       
-  isovalent	https://helm.isovalent.com
-  ```
-
-3. On the *`k8s control plane node`* cd into the cilium directory
-```
-cd ~/cilium-srv6/cilium/
-```
-
-4. Install Cilium Enterprise via this Helm chart: [cilium-helm-enterprise.yaml](cilium/helm-cilium-enterprise.yaml)
-```
-helm install cilium isovalent/cilium --version 1.16.8  --namespace kube-system -f helm-cilium-enterprise.yam 
+helm install cilium isovalent/cilium --version 1.16.8  --namespace kube-system -f cilium-enterprise.yaml 
 ```
   Note: some key lines in the yaml where we specify SRv6 attributes under *enterprise*. We're also enabling Cilium BGP from the outset:
 
