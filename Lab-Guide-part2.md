@@ -395,13 +395,7 @@ kubectl get IsovalentSRv6EgressPolicy -o yaml
   ```
 
 ## Redistribute Cilium Locators into XRd ISIS
-*`Figure 3 - reminder of full network topology`*
-
-![labnet](diagrams/labnet.png)
-
-Note: Per the full network diagram above, this lab is setup where XRd nodes 10-15 are an ISIS domain within BGP ASN 65010. The K8s/Cilium nodes in this design are eBGP peers with xrd14 and xrd15 respectively. The eBGP relationship means the K8s/Cilium nodes' locators are advertised via eBGP, but ISIS midpoint nodes (xrd12 and xrd13) won't know about those routes as they're not running BGP. So for the purposes of this lab we'll redistribute the Cilium locators into ISIS. A future version of this lab will involve connecting K8s/Cilium nodes to a small RFC7938 style eBGP-only DC fabric and explore the different protocol interactions.
-
-*`Figure 4 - reminder subset of lab topology`*
+*`Figure 4 - reminder of lab topology`*
 
 ![DC-fabric-and-k8s-vms](./topology-diagram.png)
 
