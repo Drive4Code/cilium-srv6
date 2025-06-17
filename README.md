@@ -1,7 +1,5 @@
 ## Cilium SRv6 Lab
 
-This lab is mostly built, however, the lab guide is very much under construction.
-
 The lab consists of a pair of K8s clusters separated by an XRd network as shown here:
 
 ![Topology](./topology-diagram.png)
