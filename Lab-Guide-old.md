@@ -32,10 +32,6 @@ https://cilium.io/labs/
 
 The Cilium-SRv6 dCloud Lab instance consists of a single large Ubuntu virtual machine which hosts an XRd virtual network topology and a set of nested Ubuntu VMs where we'll initialize Kubernetes and install and configure Cilium. We will use an ansible script to launch the XRd virtual network and the two K8s VMs, that way we can get to the Cilium SRv6 work as quickly as possible.
 
-*`Figure 1: Cilium-SRv6 Lab Topology `*
-
-![topology-diagram](./topology-diagram.png)
-
 1. Once the dCloud session is running establish an Anyconnect VPN session to:
 ``` 
 dcloud-rtp-anyconnect.cisco.com
@@ -80,9 +76,9 @@ cat topology.yml
 
 The first version of the Cilium SRv6 lab has quite a few XRd routers in the topology:
 
-*`Figure 2: Diagram of the XRd virtual network and k8s vms that we'll activate via ansible script`*
+*`Figure 1: Diagram of the XRd virtual network and k8s vms that we'll activate via ansible script`*
 
-![logical-topology-diagram](diagrams/labnet.png)
+![logical-topology-diagram](./topology-diagram.png)
 
 The reason we have so many routers is it gives us the ability to expand the number and types of use cases in future iterations. For the lab you're currently engaged it we'll primarily focus on the "ISIS DC" and K8s host VMs in the lower left hand portion of the network:
 
@@ -122,25 +118,22 @@ docker ps
   Output should be something like:
 
   ```
-  cisco@topology-host:~/cilium-srv6/ansible$ docker ps
-  CONTAINER ID   IMAGE                             COMMAND            CREATED              STATUS              PORTS     NAMES
-  b51e182c04b0   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd05
-  ac562e5b27bc   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd13
-  f045b1c5e321   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd20
-  6c954d2a907f   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd22
-  3c96989a99db   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd08
-  5af617e3e2e7   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd11
-  b3f678ced949   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd12
-  6399c86f5871   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd01
-  020ef950e2cb   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd14
-  f0dc3d187d4f   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd06
-  a46ad88a7e4c   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd03
-  eb9c09626b6c   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd15
-  6ef7def4cac6   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd10
-  6d9c5f0bbccc   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd21
-  b8e529aef8c3   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd07
-  6a955a47d7bf   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd02
-  8e02d9f1f38b   ios-xr/xrd-control-plane:7.10.2   "/usr/sbin/init"   About a minute ago   Up About a minute             clab-cilium-srv6-xrd04
+  cisco@clab-host:~$ docker ps
+  CONTAINER ID   IMAGE                             COMMAND                  CREATED        STATUS       PORTS                                                   NAMES
+  25f8e10af52b   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd03
+  655e16455af6   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd05
+  688d9f045828   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd10
+  08803b9819c3   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd02
+  8b154fd35176   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd06
+  f07e83b46c42   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd04
+  7d1ccf298482   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd07
+  273dfbe2aa50   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd08
+  3a69c95746f0   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd01
+  b325efcdd96b   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd12
+  a4515ef99a01   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd11
+  d13a7eabc0e8   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd09
+  5012a37725a1   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd14
+  9b26fb45e4e3   ios-xr/xrd-control-plane:24.4.1   "/usr/sbin/init"         6 weeks ago    Up 6 weeks                                                           clab-cilium-srv6-xrd13
   ```
 
 5. List the KVM virtual machines that will make up our K8s cluster: 
