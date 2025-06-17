@@ -4,10 +4,10 @@
 
 cd into the k8s-cluster00/cilium directory
 ```
-cd k8s-cluster00
+cd k8s-cluster00/cilium
 ```
 
-1. Install Cilium Enterprise via this Helm chart: [cilium-enterprise.yaml](cilium/cilium-enterprise.yaml)
+1. Install Cilium Enterprise via this Helm chart: [cilium-enterprise.yaml](k8s-cluster00/cilium/cilium-enterprise.yaml)
 ```
 helm install cilium isovalent/cilium --version 1.16.8  --namespace kube-system -f cilium-enterprise.yaml 
 ```
@@ -124,7 +124,7 @@ You may review the entire Cilium eBGP policy yaml here: [Cilium BGP](cilium/ebgp
 
 1. Apply the Cilium eBGP policy - On the k8s control plane vm cd into the cilium directory and apply the Cilium BGP CRD
 ```
-cd ~/cilium-srv6/cilium/
+cd ~/cilium-srv6/k8s-cluster00/cilium/
 kubectl apply -f 01-bgp-cluster.yaml
 ```
 
@@ -153,15 +153,17 @@ cluster00-wkr00 4200001001   65010    fc00:0:1001::1   established     9h37m42s 
 cilium bgp peers --node cluster00-wkr00
 ```
 
+*** The following steps only need to be ran on the respective control planes ***
+
 ## Cilium SRv6 Sidmanager and Locators
 Per Cilium Enterprise documentation:
 *The SID Manager manages a cluster-wide pool of SRv6 locator prefixes. You can define a prefix pool using the IsovalentSRv6LocatorPool resource. The Cilium Operator assigns a locator for each node from this prefix. In this example we'll allocate /48 bit uSID based locators.*
 
-1. Define and apply a Cilium SRv6 locator pool, example: [srv6-locator-pool.yaml](cilium/srv6-locator-pool.yaml)
+1. Define and apply a Cilium SRv6 locator pool, example: [srv6-locator-pool.yaml](./k8s-cluster00/05-srv6-locator-pool.yaml)
 
   From the ~/cilium-srv6/cilium/ directory:
   ```
-  kubectl apply -f srv6-locator-pool.yaml
+  kubectl apply -f 05-srv6-locator-pool.yaml
   ```
 
 2. Validate locator pool
@@ -234,9 +236,9 @@ kubectl get sidmanager -o custom-columns="NAME:.metadata.name,ALLOCATIONS:.spec.
 
 ## Establish Cilium VRFs
 1. Add vrf(s) - this example also adds a couple alpine linux container pods to vrf blue:
-   [vrf-blue.yaml](cilium/vrf-blue.yaml)
+   [vrf-blue.yaml](./k8s-cluster00/06-vrf-blue.yamll)
 ```
-kubectl apply -f vrf-blue.yaml
+kubectl apply -f 06-vrf-blue.yaml
 ```
 
 2. Verify VRF and sid allocation on the control plane node:
@@ -340,6 +342,8 @@ ping <the "default via" address in ip route output>
 exit
 ```
 
+* Repeat these steps for VRF Green: `07-vrf-green.yaml`
+
 ## Setup Cilium SRv6 Responder
 
 1. Per the previous set of steps, once allocated SIDs appear, we need to annotate the node. This will tell Cilium to program eBPF egress policies: 
@@ -399,7 +403,7 @@ Note: Per the full network diagram above, this lab is setup where XRd nodes 10-1
 
 *`Figure 4 - reminder subset of lab topology`*
 
-![DC-fabric-and-k8s-vms](diagrams/dc-k8s-vms.png)
+![DC-fabric-and-k8s-vms](./topology-diagram.png)
 
 xrd14 and xrd15 have been pre-configured with prefix-sets, route-policies, and bgp-to-isis redistribution. However, due to the dynamic nature of Cilium locator allocation we need to update the prefix-sets with the new Cilium locators.
 
