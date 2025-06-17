@@ -32,9 +32,9 @@ https://cilium.io/labs/
 
 The Cilium-SRv6 dCloud Lab instance consists of a single large Ubuntu virtual machine which hosts an XRd virtual network topology and a set of nested Ubuntu VMs where we'll initialize Kubernetes and install and configure Cilium. We will use an ansible script to launch the XRd virtual network and the two K8s VMs, that way we can get to the Cilium SRv6 work as quickly as possible.
 
-*`Figure 1: Cilium-SRv6 dCloud Lab Setup `*
+*`Figure 1: Cilium-SRv6 Lab Topology `*
 
-![dcloud-topology](diagrams/dcloud-topology.png)
+![topology-diagram](./topology-diagram.png)
 
 1. Once the dCloud session is running establish an Anyconnect VPN session to:
 ``` 
@@ -88,9 +88,9 @@ The reason we have so many routers is it gives us the ability to expand the numb
 
 ![DC-fabric-and-k8s-vms](diagrams/dc-k8s-vms.png)
 
-The *`k8s-cp-node00`* and *`k8s-wkr-node01`* VMs have Kubernetes packages loaded and will represent our K8s cluster. In this lab we'll initialize the k8s cluster, install Cilium, and then establish SRv6 L3VPN instances between our K8s nodes and the XRd network.
+The *`k8s-cluster00-cp`* and *`k8s-cluster00-wkr00`* VMs have Kubernetes packages loaded and will represent our K8s cluster. In this lab we'll initialize the k8s cluster, install Cilium, and then establish SRv6 L3VPN instances between our K8s nodes and the XRd network.
 
-* Note: if you wish to reconstuct this lab in your own environment you may use these [Instructions](xtra/k8s-install.md) to install containerd and kubeadm/kubelet/kubectl on one or more hosts or VMs (bare metal, dCloud, public cloud, etc.)
+* Note: if you wish to reconstuct this lab in your own environment you may use these [Instructions](./k8s-install.md) to install containerd and kubeadm/kubelet/kubectl on one or more hosts or VMs (bare metal, dCloud, public cloud, etc.)
 
 ## Ansible deploy XRd topology and K8s VMs
 Our first step will be to run an Ansible playbook that will deploy the XRd virtual network and our Kubernetes VMs. 
@@ -148,7 +148,7 @@ docker ps
 virsh list --all
 ```
 
-  Output should show a pair of running VMs: *`k8s-cp-node00`* and *`k8s-wkr-node01`*
+  Output should show a pair of running VMs: *`k8s-cluster00-cp`* and *`k8s-cluster00-wkr00`*
 
 6. List linux bridge instances on the topology-host VM:
 ```
@@ -213,9 +213,9 @@ etc.
 
 ## Initialize the Kubernetes cluster
 
-1. From the topology-host VM ssh to the k8s control plane vm: *`k8s-cp-node00`* 
+1. From the topology-host VM ssh to the k8s control plane vm: *`k8s-cluster00-cp`* 
 ```
-ssh cisco@k8s-cp-node00
+ssh cisco@k8s-cluster00-cp
 or
 ssh cisco@192.168.122.14
 ```
@@ -260,16 +260,16 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-  Next we'll join the *`k8s-wkr-node01`* VM to the Kubernetes cluster
+  Next we'll join the *`k8s-cluster00-wkr00`* VM to the Kubernetes cluster
 
-4. On the *`k8s-cp-node00`* copy the `kubeadm join` lines from the bottom of the `kubeadm init` output and paste to a separate notepad. Then type `sudo` at the beginning of the line, and delete the `\` in the middle of the command. You should now have a line that looks something like:
+4. On the *`k8s-cluster00-cp`* copy the `kubeadm join` lines from the bottom of the `kubeadm init` output and paste to a separate notepad. Then type `sudo` at the beginning of the line, and delete the `\` in the middle of the command. You should now have a line that looks something like:
 ```
 sudo kubeadm join 10.14.1.2:6443 --token 39c3m8.3c34xm1a13rp10vd --discovery-token-ca-cert-hash sha256:7fef55212ca8a46f46e803479a95c4e5df33394d7d5ee42594760a111c1808ed 
 ```
 
-5. Start a new terminal session and ssh to the topology-host and then to the k8s worker vm *`k8s-wkr-node01`* and paste your modified kubeadm join into the command line to join it to the cluster
+5. Start a new terminal session and ssh to the topology-host and then to the k8s worker vm *`k8s-cluster00-wkr00`* and paste your modified kubeadm join into the command line to join it to the cluster
 ```
-ssh cisco@k8s-wkr-node01
+ssh cisco@k8s-cluster00-wkr00
 or
 ssh cisco@192.168.122.15
 ```
@@ -288,7 +288,7 @@ ssh cisco@192.168.122.15
   Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
 ```
 
-6. Verify successfull k8s cluster initialization; from the *`k8s-cp-node00`* list the nodes in the cluster:
+6. Verify successfull k8s cluster initialization; from the *`k8s-cluster00-cp`* list the nodes in the cluster:
 ```
 kubectl get nodes -o wide
 ```
@@ -296,10 +296,10 @@ kubectl get nodes -o wide
   The command output should look something like:
 
   ```
-  cisco@k8s-cp-node00:~$ kubectl get nodes -o wide
+  cisco@k8s-cluster00-cp:~$ kubectl get nodes -o wide
   NAME             STATUS   ROLES           AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-  k8s-cp-node00    Ready    control-plane   2m15s   v1.30.3   10.14.1.2     <none>        Ubuntu 20.04.1 LTS   5.4.0-192-generic   containerd://1.7.19
-  k8s-wkr-node01   Ready    <none>          19s     v1.30.2   10.15.1.2     <none>        Ubuntu 20.04.1 LTS   5.4.0-189-generic   containerd://1.7.19
+  k8s-cluster00-cp    Ready    control-plane   2m15s   v1.30.3   10.14.1.2     <none>        Ubuntu 20.04.1 LTS   5.4.0-192-generic   containerd://1.7.19
+  k8s-cluster00-wkr00   Ready    <none>          19s     v1.30.2   10.15.1.2     <none>        Ubuntu 20.04.1 LTS   5.4.0-189-generic   containerd://1.7.19
   ```
 
 #### Optional: 
@@ -337,4 +337,4 @@ Here are some other useful kubernetes commands at this point in the process:
   ps -ef | grep "cluster-cidr"
   ```
 
-[link to part 2](README-part2.md)
+[link to part 2](./Lab-Guide-old-part2.md)
