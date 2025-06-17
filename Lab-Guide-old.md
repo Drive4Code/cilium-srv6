@@ -181,6 +181,12 @@ brctl show
   xrd22-host		8000.32a4adf32df6	no
   ```
 
+7. Enable internet connectivity to the VM host (if you haven't done so already)
+```
+sudo iptables -t nat -A POSTROUTING -o mgmt_bridge -j MASQUERADE
+```
+
+
 ## Accessing XRd routers
 
 From the *`topology-host`* VM we have two options to list the running XRd routers; we already saw the first via *`docker ps`*. The other option is to run the *containerlab inspect* CLI, which gives us a similar table, but with more info including router management IP addresses (172.20.18.x):
@@ -213,14 +219,21 @@ or
 ssh cisco@192.168.122.14
 ```
 
-  Once connected we'll use the *`kubeadm init`* command to initialize the K8s control plane. For more info on *`kubeadm`* init please refer to https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
-
-  Kubeadm init can be run without any command arguments, however, for the purposes of our lab we're going to specify k8s pod and service IP address ranges.
-
-2. Run kubeadm init:
+2. Clone the repository in every node, in both cp and wkr nodes:
 ```
-sudo kubeadm init --pod-network-cidr=10.200.0.0/16,2001:db8:200:0::/56 --service-cidr=10.96.0.0/20,2001:db8:44:44:44:44::/112
+git clone https://github.com/Drive4Code/cilium-srv6.git
 ```
+
+  Once cloned we'll use the *`kubeadm init`* command to initialize the K8s control plane. For more info on *`kubeadm`* init please refer to https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
+
+  Kubeadm init will be ran from the config file, in the `cilium-srv6/cluster-00/` directory
+
+3. Run kubeadm init:
+```
+cd cilium-srv6/cluster-00/
+sudo kubeadm init --config=kubeadm-init.yaml
+```
+Make sure to change the directory to `cilium-srv6/cluster-01/` for the second cluster, as these commands must be repeated per each cluster
 
   A successful initialization should end with output that looks something like this:
   ```
@@ -246,7 +259,7 @@ sudo kubeadm init --pod-network-cidr=10.200.0.0/16,2001:db8:200:0::/56 --service
     --discovery-token-ca-cert-hash sha256:ca00acff7b864332b6c1a5acbe7b2e960b92d0d5707985e2f66d91465ca6a404 
   ```
 
-3. Once kubeadm init completes be sure and copy/paste these three commands on the control plane node. 
+4. Once kubeadm init completes be sure and copy/paste these three commands on the control plane node. 
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -255,33 +268,45 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
   Next we'll join the *`k8s-cluster00-wkr00`* VM to the Kubernetes cluster
 
-4. On the *`k8s-cluster00-cp`* copy the `kubeadm join` lines from the bottom of the `kubeadm init` output and paste to a separate notepad. Then type `sudo` at the beginning of the line, and delete the `\` in the middle of the command. You should now have a line that looks something like:
+5. Copy the generated `kubeadm join` token and hash key in the `join-cluster.yaml` file:
+
 ```
-sudo kubeadm join 10.14.1.2:6443 --token 39c3m8.3c34xm1a13rp10vd --discovery-token-ca-cert-hash sha256:7fef55212ca8a46f46e803479a95c4e5df33394d7d5ee42594760a111c1808ed 
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: JoinConfiguration
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: 10.10.10.2:6443
+    token: "9yfoao.a7o79szgh57s2zmp"  ** Replace this with the token **
+    caCertHashes:
+    - "sha256:093844767d0592e046cc8fae7cc484b2fca82a355226a00966faf944b14984ae" ** Replace this with the hashkey **
+nodeRegistration:
+  kubeletExtraArgs:
+  - name: "node-ip"
+    value: "10.10.11.2,fc00:0:1001::2"
 ```
 
-5. Start a new terminal session and ssh to the topology-host and then to the k8s worker vm *`k8s-cluster00-wkr00`* and paste your modified kubeadm join into the command line to join it to the cluster
+6. Run the following command to join the worker node:
+```
+sudo kubeadm join --config=join-cluster.yaml 
+```
+
+7. Start a new terminal session and ssh to the topology-host and then to the k8s worker vm *`k8s-cluster00-wkr00`* and paste your modified kubeadm join into the command line to join it to the cluster
 ```
 ssh cisco@k8s-cluster00-wkr00
 or
 ssh cisco@192.168.122.15
 ```
-  Example kubeadm join from a previous installation:
 
-  ```
-  sudo kubeadm join 10.14.1.2:6443 --token 39c3m8.3c34xm1a13rp10vd --discovery-token-ca-cert-hash sha256:7fef55212ca8a46f46e803479a95c4e5df33394d7d5ee42594760a111c1808ed  
-  ```
+A successful 'join' should produce output which ends with lines like this:
+```
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
 
-  A successful 'join' should produce output which ends with lines like this:
-  ```
-  This node has joined the cluster:
-  * Certificate signing request was sent to apiserver and a response was received.
-  * The Kubelet was informed of the new secure connection details.
-
-  Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
 ```
 
-6. Verify successfull k8s cluster initialization; from the *`k8s-cluster00-cp`* list the nodes in the cluster:
+8. Verify successfull k8s cluster initialization; from the *`k8s-cluster00-cp`* list the nodes in the cluster:
 ```
 kubectl get nodes -o wide
 ```
