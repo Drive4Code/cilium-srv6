@@ -24,7 +24,7 @@
       command: "./add-bridges.sh"
       #become: true
       args:
-        chdir: /home/cisco/cilium-srv6/containerlab-xrd/
+        chdir: /home/cisco/cilium-srv6/
       ignore_errors: yes
       #register: brctl_out
 
@@ -42,7 +42,7 @@
       command: "containerlab deploy -t topology.yml"
       #become: true
       args:
-        chdir: /home/cisco/cilium-srv6/containerlab-xrd/
+        chdir: /home/cisco/cilium-srv6/
       ignore_errors: yes
       #register: clab_out
 
@@ -68,11 +68,11 @@
       delegate_to: localhost
 
     - name: virsh start k8s control plane vm
-      command: "virsh start k8s-cp-node00"
+      command: "virsh start k8s-cluster00-cp"
       ignore_errors: yes
 
     - name: virsh start k8s worker vm
-      command: "virsh start k8s-wkr-node01"
+      command: "virsh start k8s-cluster00-wkr00"
       ignore_errors: yes
 
     - name: create iptables nat masquerade for k8s cp
